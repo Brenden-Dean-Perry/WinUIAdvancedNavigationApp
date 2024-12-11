@@ -37,12 +37,17 @@
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
+            <NavigationView.AutoSuggestBox>
+                <AutoSuggestBox QueryIcon="Find" AutomationProperties.Name="Search" />
+            </NavigationView.AutoSuggestBox>
             <NavigationView.FooterMenuItems>
                 <NavigationViewItemSeparator></NavigationViewItemSeparator>
                 <NavigationViewItem Content="About" Tag="About" Icon="ContactInfo" />
                 <NavigationViewItem Content="Extend Display" Tag="Extend" Icon="FullScreen" />
             </NavigationView.FooterMenuItems>
-            <Frame x:Name="contentFrame" Padding="0, 21, 0,0" Background="Black"/>
+            <Frame x:Name="contentFrame" Padding="0, 21, 0,0" Background="Black">
+                <TabView AddTabButtonClick="TabView_AddTabButtonClick" TabCloseRequested="TabView_TabCloseRequested" Loaded="TabView_Loaded" />
+            </Frame>
         </NavigationView>
 
     </Grid>
