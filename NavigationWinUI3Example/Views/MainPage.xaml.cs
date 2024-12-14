@@ -25,6 +25,7 @@ namespace NavigationWinUI3Example.Views
     public sealed partial class MainPage : Page
     {
         private string AppName { get; set; }
+        private TabHelper TabHelper { get; set; } = new TabHelper();
         public MainPage()
         {
             this.InitializeComponent();
@@ -36,7 +37,8 @@ namespace NavigationWinUI3Example.Views
             var selectedItem = (NavigationViewItem)e.SelectedItem;
             if (e.IsSettingsSelected)
             {
-                tabView.TabItems.Add(CreateNewTab(typeof(Settings)));
+                TabViewItem tab = TabHelper.CreateNewTab(typeof(Settings));
+                tabView.TabItems.Add(tab);
                 List<TabViewItem> viewItems=  tabView.TabItems.Select(x => (TabViewItem)x).ToList();
                 TabViewItem tabViewItem = viewItems.Where(x => x.Tag.ToString() == nameof(Settings)).FirstOrDefault();
                 int index = viewItems.IndexOf(tabViewItem);
@@ -62,7 +64,7 @@ namespace NavigationWinUI3Example.Views
                 if (pageType != null)
                 {
                     //contentFrame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
-                    tabView.TabItems.Add(CreateNewTab(pageType));
+                    tabView.TabItems.Add(TabHelper.CreateNewTab(pageType));
                     int index = tabView.TabItems.Count - 1;
                     tabView.SelectedIndex = index;
                 }
@@ -108,24 +110,9 @@ namespace NavigationWinUI3Example.Views
 
         private void TabView_Loaded(object sender, RoutedEventArgs e)
         {
-             (sender as TabView).TabItems.Add(CreateNewTab(typeof(Home)));
+             (sender as TabView).TabItems.Add(TabHelper.CreateNewTab(typeof(Home)));
         }
 
-        private TabViewItem CreateNewTab(Type pageType)
-        {
-            TabViewItem newItem = new TabViewItem();
-            newItem.Tag = pageType.Name;
-            newItem.Header = pageType.Name;
-            newItem.IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = Symbol.Document };
-
-            // The content of the tab is often a frame that contains a page, though it could be any UIElement.
-            Frame frame = new Frame();
-            if (pageType != null)
-            {
-                frame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
-            }
-            newItem.Content = frame;
-            return newItem;
-        }
+        
     }
 }
