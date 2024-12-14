@@ -45,8 +45,9 @@
                 <NavigationViewItem Content="About" Tag="About" Icon="ContactInfo" />
                 <NavigationViewItem Content="Extend Display" Tag="Extend" Icon="FullScreen" />
             </NavigationView.FooterMenuItems>
-            <Frame x:Name="contentFrame" Padding="0, 21, 0,0" Background="Black">
-                <TabView AddTabButtonClick="TabView_AddTabButtonClick" TabCloseRequested="TabView_TabCloseRequested" Loaded="TabView_Loaded" />
+            <Frame x:Name="contentFrame" Padding="0, 34, 0, 0" Background="Black">
+                <TabView Name="tabView" IsAddTabButtonVisible="False" 
+                         TabCloseRequested="TabView_TabCloseRequested" Loaded="TabView_Loaded" />
             </Frame>
         </NavigationView>
 

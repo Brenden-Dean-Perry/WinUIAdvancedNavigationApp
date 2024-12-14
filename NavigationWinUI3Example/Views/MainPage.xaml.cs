@@ -36,7 +36,10 @@ namespace NavigationWinUI3Example.Views
             var selectedItem = (NavigationViewItem)e.SelectedItem;
             if (e.IsSettingsSelected)
             {
-                contentFrame.Navigate(typeof(Settings), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
+                tabView.TabItems.Add(CreateNewTab(typeof(Settings)));
+                int index = tabView.TabItems.IndexOf(typeof(Settings));
+                tabView.SelectedIndex = index;
+                //contentFrame.Navigate(typeof(Settings), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
             }
             else if (selectedItem != null && selectedItem.Tag.ToString() == "Extend")
             {
@@ -54,11 +57,12 @@ namespace NavigationWinUI3Example.Views
             {
                 string pageName = selectedItem.Tag.ToString();
                 Type pageType = Type.GetType(pageName);
-
                 if (pageType != null)
                 {
-                    //Frame.Navigate(pageType);
-                    contentFrame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
+                    //contentFrame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
+                    tabView.TabItems.Add(CreateNewTab(pageType));
+                    int index = tabView.TabItems.Count - 1;
+                    tabView.SelectedIndex = index;
                 }
                 else
                 {
@@ -69,9 +73,14 @@ namespace NavigationWinUI3Example.Views
 
         private void NavigationViewControl_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
         {
-            if (contentFrame.CanGoBack)
+            //if (contentFrame.CanGoBack)
+            //{
+            //    contentFrame.GoBack();
+            //}
+            int index = tabView.SelectedIndex - 1;
+            if(index >= 0)
             {
-                contentFrame.GoBack();
+                tabView.SelectedIndex = index;
             }
         }
 
@@ -90,10 +99,6 @@ namespace NavigationWinUI3Example.Views
             var result = await dialog.ShowAsync();
         }
 
-        private void TabView_AddTabButtonClick(TabView sender, object args)
-        {
-            sender.TabItems.Add(CreateNewTab(sender.TabItems.Count));
-        }
 
         private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
         {
@@ -102,38 +107,22 @@ namespace NavigationWinUI3Example.Views
 
         private void TabView_Loaded(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 3; i++)
-            {
-                (sender as TabView).TabItems.Add(CreateNewTab(i));
-            }
-
+             (sender as TabView).TabItems.Add(CreateNewTab(typeof(Home)));
         }
 
-        private TabViewItem CreateNewTab(int index)
+        private TabViewItem CreateNewTab(Type pageType)
         {
             TabViewItem newItem = new TabViewItem();
-
-            newItem.Header = $"Document {index}";
+            newItem.Header = pageType.Name;
             newItem.IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = Symbol.Document };
 
             // The content of the tab is often a frame that contains a page, though it could be any UIElement.
             Frame frame = new Frame();
-
-            switch (index % 3)
+            if (pageType != null)
             {
-                case 0:
-                    frame.Navigate(typeof(Account));
-                    break;
-                case 1:
-                    frame.Navigate(typeof(Calendar));
-                    break;
-                case 2:
-                    frame.Navigate(typeof(Mail));
-                    break;
+                frame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
             }
-
             newItem.Content = frame;
-
             return newItem;
         }
     }

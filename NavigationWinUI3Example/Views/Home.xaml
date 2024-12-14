@@ -20,6 +20,10 @@
                Style="{StaticResource TitleTextBlockStyle}"/>
             <TextBlock></TextBlock>
             <TextBlock x:Name="Greeting" HorizontalAlignment="Center" ></TextBlock>
+            <TextBlock  HorizontalAlignment="Center" ></TextBlock>
+            <TextBlock HorizontalAlignment="Center" ></TextBlock>
+            <TextBlock  HorizontalAlignment="Center" ></TextBlock>
+            <TextBlock HorizontalAlignment="Center" ></TextBlock>
         </StackPanel>
 
     </Grid>
