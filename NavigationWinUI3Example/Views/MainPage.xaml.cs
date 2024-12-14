@@ -37,7 +37,9 @@ namespace NavigationWinUI3Example.Views
             if (e.IsSettingsSelected)
             {
                 tabView.TabItems.Add(CreateNewTab(typeof(Settings)));
-                int index = tabView.TabItems.IndexOf(typeof(Settings));
+                List<TabViewItem> viewItems=  tabView.TabItems.Select(x => (TabViewItem)x).ToList();
+                TabViewItem tabViewItem = viewItems.Where(x => x.Tag.ToString() == nameof(Settings)).FirstOrDefault();
+                int index = viewItems.IndexOf(tabViewItem);
                 tabView.SelectedIndex = index;
                 //contentFrame.Navigate(typeof(Settings), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
             }
@@ -99,7 +101,6 @@ namespace NavigationWinUI3Example.Views
             var result = await dialog.ShowAsync();
         }
 
-
         private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
         {
             sender.TabItems.Remove(args.Tab);
@@ -113,6 +114,7 @@ namespace NavigationWinUI3Example.Views
         private TabViewItem CreateNewTab(Type pageType)
         {
             TabViewItem newItem = new TabViewItem();
+            newItem.Tag = pageType.Name;
             newItem.Header = pageType.Name;
             newItem.IconSource = new Microsoft.UI.Xaml.Controls.SymbolIconSource() { Symbol = Symbol.Document };
 
