@@ -7,7 +7,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    xmlns:oxy="using:OxyPlot">
+    
 
 
     <Grid>
@@ -23,7 +25,11 @@
             <TextBlock  HorizontalAlignment="Center" ></TextBlock>
             <TextBlock HorizontalAlignment="Center" ></TextBlock>
             <TextBlock  HorizontalAlignment="Center" ></TextBlock>
-            <TextBlock HorizontalAlignment="Center" ></TextBlock>
+
+            <Grid Visibility="Visible" Height="700">
+                <oxy:PlotView Model="{x:Bind ChartDataModel}" />
+            </Grid>
+            <TextBlock HorizontalAlignment="Center" Text="End" ></TextBlock>
         </StackPanel>
 
     </Grid>

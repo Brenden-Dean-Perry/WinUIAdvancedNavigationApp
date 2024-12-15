@@ -73,8 +73,7 @@ namespace NavigationWinUI3Example.Views
 
         private void NavigationView_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
-            var navView = (NavigationView)sender;
-            NavigationViewItem selectedItem = navView.SelectedItem as NavigationViewItem;
+            NavigationViewItem selectedItem = (NavigationViewItem)sender;
             if (selectedItem != null && selectedItem.Tag.ToString() != "Extend")
             {
                 string pageName = selectedItem.Tag.ToString();

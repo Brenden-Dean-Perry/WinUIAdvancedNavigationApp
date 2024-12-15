@@ -20,16 +20,14 @@
                         IsTitleBarAutoPaddingEnabled="False"
                         IsTabStop="False"
                         IsBackEnabled="True"
-                        IsDoubleTapEnabled="True"
                         BackRequested="NavigationViewControl_BackRequested"
-                        SelectionChanged="NavigationView_SelectionChanged"
-                        DoubleTapped="NavigationView_DoubleTapped">
+                        SelectionChanged="NavigationView_SelectionChanged">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Home" Icon="Home" ToolTipService.ToolTip="Home" Tag="NavigationWinUI3Example.Views.Home"/>
                 <NavigationViewItem Content="Account" Icon="Contact" ToolTipService.ToolTip="Account" Tag="NavigationWinUI3Example.Views.Account">
                     <NavigationViewItem.MenuItems>
-                        <NavigationViewItem Content="Mail" Icon="Mail" ToolTipService.ToolTip="Mail" Tag="NavigationWinUI3Example.Views.Mail"/>
-                        <NavigationViewItem Content="Calendar" Icon="Calendar" ToolTipService.ToolTip="Calendar" Tag="NavigationWinUI3Example.Views.Calendar"/>
+                        <NavigationViewItem Content="Mail" Icon="Mail" ToolTipService.ToolTip="Mail" Tag="NavigationWinUI3Example.Views.Mail" DoubleTapped="NavigationView_DoubleTapped"/>
+                        <NavigationViewItem Content="Calendar" Icon="Calendar" ToolTipService.ToolTip="Calendar" Tag="NavigationWinUI3Example.Views.Calendar" DoubleTapped="NavigationView_DoubleTapped"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
                 <NavigationViewItem Content="Document options" Icon="Page2" ToolTipService.ToolTip="Document options" SelectsOnInvoked="False">

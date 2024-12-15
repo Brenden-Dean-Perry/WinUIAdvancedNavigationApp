@@ -5,6 +5,9 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using OxyPlot;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,6 +26,7 @@ namespace NavigationWinUI3Example.Views
     /// </summary>
     public sealed partial class Home : Page
     {
+        PlotModel ChartDataModel { get; set; } = ChartViewModel.Model;
         public Home()
         {
             this.InitializeComponent();
