@@ -10,7 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Border x:Name="AppTitleBar" Grid.Column="0" Background="Black" VerticalAlignment="Top" Height="44" >
+        <Border x:Name="AppTitleBar" Grid.Column="0" Background="Black" VerticalAlignment="Top" Height="44">
             <TextBlock x:Name="AppTitle" Text="{x:Bind AppName}" VerticalAlignment="Top" Margin="55,13,0, 0" />
         </Border>
         <NavigationView x:Name="mainNavigationView" 
