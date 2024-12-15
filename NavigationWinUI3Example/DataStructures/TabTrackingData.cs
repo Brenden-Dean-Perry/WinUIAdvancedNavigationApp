@@ -10,12 +10,13 @@ namespace NavigationWinUI3Example
     internal class TabTrackingData
     {
         internal TabViewItem Tab { get; set; }
-        internal DateTime CreateTime { get; set; }
+        internal Type TabPageType { get; set; }
+        internal DateTime CreateTime { get; set; } = DateTime.Now;
         internal TabTrackingData() { }
-        internal TabTrackingData(TabViewItem tab) 
+        internal TabTrackingData(TabViewItem tab, Type tabPageType) 
         {
             this.Tab = tab;
-            this.CreateTime = DateTime.Now;
+            this.TabPageType = tabPageType;
         }
 
 

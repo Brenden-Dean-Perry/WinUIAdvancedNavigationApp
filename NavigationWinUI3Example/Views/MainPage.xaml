@@ -20,8 +20,10 @@
                         IsTitleBarAutoPaddingEnabled="False"
                         IsTabStop="False"
                         IsBackEnabled="True"
+                        IsDoubleTapEnabled="True"
                         BackRequested="NavigationViewControl_BackRequested"
-                        SelectionChanged="NavigationView_SelectionChanged">
+                        SelectionChanged="NavigationView_SelectionChanged"
+                        DoubleTapped="NavigationView_DoubleTapped">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="Home" Icon="Home" ToolTipService.ToolTip="Home" Tag="NavigationWinUI3Example.Views.Home"/>
                 <NavigationViewItem Content="Account" Icon="Contact" ToolTipService.ToolTip="Account" Tag="NavigationWinUI3Example.Views.Account">
@@ -38,7 +40,7 @@
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox QueryIcon="Find" AutomationProperties.Name="Search" />
+                <AutoSuggestBox QueryIcon="Find" AutomationProperties.Name="Search" PlaceholderText="Search"/>
             </NavigationView.AutoSuggestBox>
             <NavigationView.FooterMenuItems>
                 <NavigationViewItemSeparator></NavigationViewItemSeparator>
@@ -47,7 +49,8 @@
             </NavigationView.FooterMenuItems>
             <Frame x:Name="contentFrame" Padding="0, 34, 0, 0" Background="Black">
                 <TabView Name="tabView" IsAddTabButtonVisible="False" 
-                         TabCloseRequested="TabView_TabCloseRequested" Loaded="TabView_Loaded" />
+                         TabCloseRequested="TabView_TabCloseRequested" Loaded="TabView_Loaded"
+                         SelectionChanged="tabView_SelectionChanged"/>
             </Frame>
         </NavigationView>
 

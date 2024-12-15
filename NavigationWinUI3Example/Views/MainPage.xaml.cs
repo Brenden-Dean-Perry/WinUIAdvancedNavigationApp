@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.AccessControl;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -23,66 +24,93 @@ namespace NavigationWinUI3Example.Views
     public sealed partial class MainPage : Page
     {
         private string AppName { get; set; }
-        private TabHelper TabHelper { get; set; } = new TabHelper();
+        private TabViewHelper TabViewHelper { get; set; }
         public MainPage()
         {
             this.InitializeComponent();
             AppName = ((App)Application.Current).AppName;
+            TabViewHelper = new TabViewHelper(tabView);
         }
 
         private void NavigationView_SelectionChanged(object sender, NavigationViewSelectionChangedEventArgs e)
         {
             var selectedItem = (NavigationViewItem)e.SelectedItem;
-            if (e.IsSettingsSelected)
+            if (selectedItem != null && selectedItem.Tag.ToString() == "Extend")
             {
-                TabViewItem tab = TabHelper.CreateNewTab(typeof(Settings));
-                tabView.TabItems.Add(tab);
-                List<TabViewItem> viewItems=  tabView.TabItems.Select(x => (TabViewItem)x).ToList();
-                TabViewItem tabViewItem = viewItems.Where(x => x.Tag.ToString() == nameof(Settings)).FirstOrDefault();
-                int index = viewItems.IndexOf(tabViewItem);
-                tabView.SelectedIndex = index;
-                //contentFrame.Navigate(typeof(Settings), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
-            }
-            else if (selectedItem != null && selectedItem.Tag.ToString() == "Extend")
-            {
-                    var newWindow = WindowHelper.CreateWindow();
-                    var rootPage = new Frame();
-                    newWindow.Content = rootPage;
-                    newWindow.Activate();
+                var newWindow = WindowHelper.CreateWindow();
+                var rootPage = new Frame();
+                newWindow.Content = rootPage;
+                newWindow.Activate();
 
-                    // C# code to navigate in the new window
-                    var targetPageType = typeof(MainPage);
-                    string targetPageArguments = string.Empty;
-                    rootPage.Navigate(targetPageType, targetPageArguments);
+                // C# code to navigate in the new window
+                var targetPageType = typeof(MainPage);
+                string targetPageArguments = string.Empty;
+                rootPage.Navigate(targetPageType, targetPageArguments);
             }
-            else if(selectedItem != null)
+            else
             {
-                string pageName = selectedItem.Tag.ToString();
-                Type pageType = Type.GetType(pageName);
+                Type pageType = GetPageType(selectedItem, e);
                 if (pageType != null)
                 {
-                    //contentFrame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
-                    tabView.TabItems.Add(TabHelper.CreateNewTab(pageType));
-                    int index = tabView.TabItems.Count - 1;
-                    tabView.SelectedIndex = index;
+                    TabViewHelper.SmartTabSelect(pageType);
                 }
                 else
                 {
                     ShowDialog_Click(this, null);
                 }
-            }        
+            }
+        }
+
+        private Type GetPageType(NavigationViewItem navigationViewItem, NavigationViewSelectionChangedEventArgs e)
+        {
+            if (e.IsSettingsSelected)
+            {
+                return typeof(Settings);
+            }
+            string pageName = navigationViewItem.Tag.ToString();
+            return Type.GetType(pageName);
+        }
+
+        private void NavigationView_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            var navView = (NavigationView)sender;
+            NavigationViewItem selectedItem = navView.SelectedItem as NavigationViewItem;
+            if (selectedItem != null && selectedItem.Tag.ToString() != "Extend")
+            {
+                string pageName = selectedItem.Tag.ToString();
+                Type pageType = Type.GetType(pageName);
+                if (pageType != null)
+                {
+                    Guid tabId = TabViewHelper.AddNewTab(pageType);
+                    TabViewHelper.SelectTabByGUID(tabId);
+                }
+            }
+        }
+
+        private void TabView_Loaded(object sender, RoutedEventArgs e)
+        {
+            Guid tabId = TabViewHelper.AddNewTab(typeof(Home));
+            TabViewHelper.SelectTabByGUID(tabId);
+        }
+
+        private void tabView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TabViewItem tabItem = (TabViewItem)((TabView)sender).SelectedItem;
+            if (tabItem != null)
+            {
+                TabViewHelper.StoreTabNavigation(tabItem);
+            }
+        }
+        private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
+        {
+            TabViewHelper.RemoveTabByGUID((Guid)args.Tab.Tag);
         }
 
         private void NavigationViewControl_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
         {
-            //if (contentFrame.CanGoBack)
-            //{
-            //    contentFrame.GoBack();
-            //}
-            int index = tabView.SelectedIndex - 1;
-            if(index >= 0)
+            if (TabViewHelper.CanGoBack() == true)
             {
-                tabView.SelectedIndex = index;
+                TabViewHelper.GoBack();
             }
         }
 
@@ -101,16 +129,5 @@ namespace NavigationWinUI3Example.Views
             var result = await dialog.ShowAsync();
         }
 
-        private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
-        {
-            sender.TabItems.Remove(args.Tab);
-        }
-
-        private void TabView_Loaded(object sender, RoutedEventArgs e)
-        {
-             (sender as TabView).TabItems.Add(TabHelper.CreateNewTab(typeof(Home)));
-        }
-
-        
     }
 }
